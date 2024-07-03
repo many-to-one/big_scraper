@@ -124,3 +124,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery Configuration Options
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Optional: Schedule settings for Celery Beat
+CELERY_BEAT_SCHEDULE = {
+    'scrapy-task-every-10-minutes': {
+        'task': 'scraper.tasks.run_scrapy_crawl',
+        'schedule': 60.0,  # Run every 10 minutes
+    },
+}
