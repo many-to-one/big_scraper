@@ -5,6 +5,8 @@ from scrapy.settings import Settings
 from scraper import settings as my_settings
 from scraper.spiders.touch_spider import MainSpider
 
+from scrapy import cmdline
+
 
 class Command(BaseCommand):
     help = 'Release spider'
@@ -17,3 +19,6 @@ class Command(BaseCommand):
 
         process.crawl(MainSpider)
         process.start()
+
+    # def handle(self, *args, **options):
+    #     cmdline.execute("scrapy crawl allegro".split())
