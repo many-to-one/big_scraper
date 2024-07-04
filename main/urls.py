@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import getScraper
+from .views import StartScraperView
 
 urlpatterns = [
-    path('scrape/', getScraper.as_view(), name='scrape'),
+    path('scrape/', StartScraperView.as_view(), name='scrape'),
 ]
