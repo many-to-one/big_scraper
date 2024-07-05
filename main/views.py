@@ -26,31 +26,28 @@ from threading import Thread
 import time
 import schedule
 from django.core.management import call_command
+from .tasks import run_spider
+from celery.result import AsyncResult
+
+
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from scrapy.settings import Settings
+from scraper import settings as my_settings
+from scraper.spiders.touch_spider import MainSpider
 
 class StartScraperView(View):
-    # Thread to run the schedule in background
-    def start_scraper_thread(self):
-        def run_schedule():
-            while True:
-                schedule.run_pending()
-                time.sleep(1)
-                
-        # Define the task to be scheduled
-        def do_scrap():
-            # Here you can call your scrapy command or any other long-running task
-            print("Running scheduled task...")
-            call_command('crawl')  # Uncomment if you want to run the Scrapy spider
 
-        # Schedule the task every 10 minutes
-        schedule.every(1).minutes.do(do_scrap)
+    # def start_scraper(self):
 
-        # Start the schedule loop in a separate thread
-        thread = Thread(target=run_schedule)
-        thread.daemon = True  # Daemonize thread to stop when main thread stops
-        thread.start()
+    #     # res = run_spider.apply(args=(2, 2)).get()
+    #     res = run_spider.apply().get()
+    #     return res
 
     def get(self, request, *args, **kwargs):
-        # Start the scraper thread if not already started
-        self.start_scraper_thread()
-        return HttpResponse("Scraper started in background thread.")
 
+        # result_value= self.start_scraper()
+        # call_command('crawl')
+        run_spider.apply().get()
+
+        return HttpResponse(f"Scraper completed. Result ")

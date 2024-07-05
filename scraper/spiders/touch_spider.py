@@ -14,6 +14,8 @@ from django.core.management import call_command
 
 class MainSpider(scrapy.Spider):
     name = "allegro"
+    download_delay = 0.5
+    FEED_EXPORT_ENCODING = 'utf-8'
     # allowed_domains = ["allegro.pl"]
     # start_urls = ["https://allegro.pl/kategoria/zabawki-edukacyjne-11821"]
     # allowed_domains = ["youtube.com"]
