@@ -59,6 +59,10 @@ from scrapy import signals
 #     # print('run_spider called')
 #     return x + y
 
+@shared_task
+def health_check():
+    logger.info('Task Runner is healthy 🍎')
+
 # @app.task
 @shared_task
 def run_spider():

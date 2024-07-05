@@ -135,4 +135,12 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'main.tasks.run_spider',
         'schedule': 60.0,  # Run every 1 minute
     },
+    'scrapy-test-every-10-seconds': {
+        'task': 'main.tasks.health_check',
+        'schedule': 10.0,  # Run every 10 seconds
+    },
 }
+
+# D:\ALEX\2023\08\jpg\cash\prj\scr_app
+# .\venv\Scripts\activate
+# celery -A scr_app worker -l info
