@@ -26,7 +26,7 @@ from threading import Thread
 import time
 import schedule
 from django.core.management import call_command
-from .tasks import run_spider
+# from .tasks import run_spider
 from celery.result import AsyncResult
 
 
@@ -48,6 +48,6 @@ class StartScraperView(View):
 
         # result_value= self.start_scraper()
         # call_command('crawl')
-        run_spider.apply().get()
+        # run_spider.apply().get()
 
         return HttpResponse(f"Scraper completed. Result ")

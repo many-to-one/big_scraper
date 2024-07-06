@@ -15,6 +15,7 @@ NEWSPIDER_MODULE = "scraper.spiders"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "allegro_scraper (+http://www.yourdomain.com)"
+# USER_AGENT = "allegro_scraper"
 
 # USER_AGENTS = [
 #     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
@@ -108,5 +109,6 @@ ROBOTSTXT_OBEY = True
 
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+TWISTED_REACTOR = "twisted.internet.epollreactor.EPollReactor" #"twisted.internet.asyncioreactor.AsyncioSelectorReactor" 
+#"twisted.internet.epollreactor.EPollReactor"  
 FEED_EXPORT_ENCODING = "utf-8"

@@ -50,7 +50,8 @@ soupsieve==2.5
 sqlparse==0.5.0
 tldextract==5.1.2
 Twisted==24.3.0
-twisted-iocpsupport==1.0.4
+# twisted-iocpsupport==1.0.4
+twisted-iocpsupport; sys_platform == 'win64'
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2

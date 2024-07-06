@@ -10,6 +10,8 @@ import time
 from scrapy import cmdline
 from django.core.management import call_command
 
+# asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 # scrapy crawl allegro
 
 class MainSpider(scrapy.Spider):
@@ -23,6 +25,7 @@ class MainSpider(scrapy.Spider):
     # start_urls = ["https://www.pracuj.pl/praca/badania%20i%20rozw%C3%B3j;cc,5002"] 
     allowed_domains = ["olx.pl"]
     start_urls = ["https://www.olx.pl/praca/e-commerce-handel-internetowy/"]
+
     # allowed_domains = ["otomoto.pl"]
     # start_urls = ["https://www.otomoto.pl/osobowe"] 
     # allowed_domains = ["amazon.pl"]
@@ -133,67 +136,7 @@ class MainSpider(scrapy.Spider):
 
 
     # ____________________________# olx.pl # ____________________________#
-    async def parse(self, response):
-        if response.status == 403:
-            self.log("Access forbidden - 403 error.")
-            return
-
-        for job in response.css('div.jobs-ad-card'):
-            job_title = job.css('a h6::text').get()
-            job_link = job.css('a::attr(href)').get()
-            
-            # Drukowanie wyników
-            self.log(f'Title: {job_title}')
-            self.log(f'Link: {job_link}')
-            
-            # Save job data to the Job model
-            # await sync_to_async(Job.objects.create)(
-            #     title=job_title,
-            #     url=response.urljoin(job_link)
-            # )
-
-            # Check if job already exists before creating
-            exists = await sync_to_async(Job.objects.filter)(
-                title=job_title,
-                url=job_link
-            )
-
-            # self.log(f'exists: {job_link}')
-
-            exists = await sync_to_async(exists.exists)()
-
-            if not exists:
-                # Create new job entry if it does not exist
-                await sync_to_async(Job.objects.create)(
-                    title=job_title,
-                    url=job_link
-                )
-                self.log(f'Created new job entry: {job_title}')
-            else:
-                self.log(f'Job already exists: {job_title}')
-            
-            # Można tutaj dodać logikę, która będzie zapisywała dane do pliku lub przekazywała je dalej
-            yield {
-                'title': job_title,
-                'link': response.urljoin(job_link)  # Tworzy pełny URL do oferty pracy
-            }
-
-        # Find the link to the next page
-        # next_page = response.css('a[data-testid="pagination-forward"]::attr(href)').get()
-        
-        # if next_page:
-        #     # Construct the full URL and request the next page
-        #     next_page_url = response.urljoin(next_page)
-        #     print(' @#@#@#@#@#@ NEXT PAGE @#@#@#@#@#@ ')
-        #     yield scrapy.Request(url=next_page_url, callback=self.parse)
-
-    # ____________________________# end of olx.pl # ____________________________#
-
-
-
-
-    # # ____________________________# olx.pl # ____________________________#
-    # def parse(self, response):
+    # async def parse(self, response):
     #     if response.status == 403:
     #         self.log("Access forbidden - 403 error.")
     #         return
@@ -213,18 +156,18 @@ class MainSpider(scrapy.Spider):
     #         # )
 
     #         # Check if job already exists before creating
-    #         exists = Job.objects.filter(
+    #         exists = await sync_to_async(Job.objects.filter)(
     #             title=job_title,
     #             url=job_link
     #         )
 
     #         # self.log(f'exists: {job_link}')
 
-    #         exists = exists.exists()
+    #         exists = await sync_to_async(exists.exists)()
 
     #         if not exists:
     #             # Create new job entry if it does not exist
-    #             Job.objects.create(
+    #             await sync_to_async(Job.objects.create)(
     #                 title=job_title,
     #                 url=job_link
     #             )
@@ -238,26 +181,70 @@ class MainSpider(scrapy.Spider):
     #             'link': response.urljoin(job_link)  # Tworzy pełny URL do oferty pracy
     #         }
 
-    #     # Find the link to the next page
-    #     # next_page = response.css('a[data-testid="pagination-forward"]::attr(href)').get()
+        # Find the link to the next page
+        # next_page = response.css('a[data-testid="pagination-forward"]::attr(href)').get()
         
-    #     # if next_page:
-    #     #     # Construct the full URL and request the next page
-    #     #     next_page_url = response.urljoin(next_page)
-    #     #     print(' @#@#@#@#@#@ NEXT PAGE @#@#@#@#@#@ ')
-    #     #     yield scrapy.Request(url=next_page_url, callback=self.parse)
+        # if next_page:
+        #     # Construct the full URL and request the next page
+        #     next_page_url = response.urljoin(next_page)
+        #     print(' @#@#@#@#@#@ NEXT PAGE @#@#@#@#@#@ ')
+        #     yield scrapy.Request(url=next_page_url, callback=self.parse)
 
-    # # def crawl_quotes(): 
-    # #     cmdline.execute("python manage.py crawl".split())
+    # ____________________________# end of olx.pl # ____________________________#
 
-    # # # schedule the spider to run every 30 seconds 
-    # # schedule.every(60).seconds.do(crawl_quotes) 
-    
-    # # # infinite loop to run the scheduled spider 
-    # # while True: 
-    # #     schedule.run_pending() 
-    # #     time.sleep(1)
-    # # ____________________________# end of olx.pl # ____________________________#
+
+
+
+    # ____________________________# olx.pl # ____________________________#
+    def parse(self, response):
+        if response.status == 403:
+            self.log("Access forbidden - 403 error.")
+            return
+
+        for job in response.css('div.jobs-ad-card'):
+            job_title = job.css('a h6::text').get()
+            job_link = job.css('a::attr(href)').get()
+            
+            # Drukowanie wyników
+            self.log(f'Title: {job_title}')
+            self.log(f'Link: {job_link}')
+            
+            # Check if job already exists before creating
+            exists = Job.objects.filter(
+                title=job_title,
+                url=job_link
+            )
+
+            # self.log(f'exists: {job_link}')
+
+            exists = exists.exists()
+
+            if not exists:
+                # Create new job entry if it does not exist
+                Job.objects.create(
+                    title=job_title,
+                    url=job_link
+                )
+                self.log(f'Created new job entry: {job_title}')
+            else:
+                self.log(f'Job already exists: {job_title}')
+            
+            # Można tutaj dodać logikę, która będzie zapisywała dane do pliku lub przekazywała je dalej
+            yield {
+                'title': job_title,
+                'link': response.urljoin(job_link)  # Tworzy pełny URL do oferty pracy
+            }
+
+        # Find the link to the next page
+        next_page = response.css('a[data-testid="pagination-forward"]::attr(href)').get()
+        
+        if next_page:
+            # Construct the full URL and request the next page
+            next_page_url = response.urljoin(next_page)
+            print(' @#@#@#@#@#@ NEXT PAGE @#@#@#@#@#@ ')
+            yield scrapy.Request(url=next_page_url, callback=self.parse)
+
+    # ____________________________# end of olx.pl # ____________________________#
 
 
 
