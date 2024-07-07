@@ -39,23 +39,12 @@ class MainSpider(scrapy.Spider):
         'RETRY_HTTP_CODES': [403, 500, 502, 503, 504],  # Retry on these HTTP codes
         'COOKIES_ENABLED': True,
         'ROTATING_PROXY_LIST': [
-            '50.168.72.119:80',
-            '50.217.226.44:80',
-            '5.189.184.6:80',
-            '195.23.57.78:80',
-            '89.22.120.116:80',
-            '50.223.239.183:80',
-            '34.122.187.196:80',
-            '50.174.145.12:80',
-            '50.207.199.87:80',
-            '50.169.135.10:80',
-            '50.174.7.158:80',
-            '50.168.72.118:80',
-            '104.225.220.233:80',
-            '23.254.231.55:80',
-            '116.203.28.43:80',
-            '51.254.69.243:3128',
-            '81.171.24.199:3128',
+            '50.218.224.35:80',
+            '50.218.57.74:80',
+            '68.185.57.66:80',
+            '50.174.145.15:80',
+            '50.172.75.121:80',
+            '50.207.199.86:80',
         ],
         'DOWNLOADER_MIDDLEWARES': {
             'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
@@ -201,6 +190,30 @@ class MainSpider(scrapy.Spider):
             self.log("Access forbidden - 403 error.")
             return
 
+        # for job in response.css('div.jobs-ad-card'):
+        #     job_title = job.css('a h6::text').get()
+        #     job_link_ = job.css('a::attr(href)').get()
+        #     job_link = response.urljoin(job_link_)
+            
+        #     salary = job.xpath('.//p[contains(@class, "css-9i84wo")]/text()').get()#.strip()
+        #     location = job.css('.css-d5w927::text').get()
+        #     employment_type = job.xpath('.//p[contains(@class, "css-s7oag9")][1]/text()').get()
+        #     experience_required = job.css('.css-17tytap::text').getall()
+        #     posted_date = job.css('.css-zmjp5b::text').get()
+            
+        #     yield {
+        #         'job_title': job_title,
+        #         'job_link': job_link,
+        #         'salary': salary,
+        #         'location': location,
+        #         'employment_type': employment_type,
+        #         # 'contract_type': contract_type,
+        #         'experience_required': experience_required,
+        #         'posted_date': posted_date
+        #     }
+
+
+
         for job in response.css('div.jobs-ad-card'):
             job_title = job.css('a h6::text').get()
             job_link = job.css('a::attr(href)').get()
@@ -236,13 +249,13 @@ class MainSpider(scrapy.Spider):
             }
 
         # Find the link to the next page
-        next_page = response.css('a[data-testid="pagination-forward"]::attr(href)').get()
+        # next_page = response.css('a[data-testid="pagination-forward"]::attr(href)').get()
         
-        if next_page:
-            # Construct the full URL and request the next page
-            next_page_url = response.urljoin(next_page)
-            print(' @#@#@#@#@#@ NEXT PAGE @#@#@#@#@#@ ')
-            yield scrapy.Request(url=next_page_url, callback=self.parse)
+        # if next_page:
+        #     # Construct the full URL and request the next page
+        #     next_page_url = response.urljoin(next_page)
+        #     print(' @#@#@#@#@#@ NEXT PAGE @#@#@#@#@#@ ')
+        #     yield scrapy.Request(url=next_page_url, callback=self.parse)
 
     # ____________________________# end of olx.pl # ____________________________#
 

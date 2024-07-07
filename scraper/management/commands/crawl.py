@@ -20,6 +20,12 @@ class Command(BaseCommand):
 
         process.crawl(MainSpider)
         process.start()
+        if process:
+            print(' ***************** PROCESS ***************** ', process)
+        else:
+            print(' ***************** NO NO NO PROCESS ***************** ')
+
+        # process.stop()
 
     # def handle(self, *args, **options):
     #     cmdline.execute("scrapy crawl allegro".split())

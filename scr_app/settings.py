@@ -133,11 +133,11 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'scrapy-task-every-1-minute': {
         'task': 'main.tasks.run_spider',
-        'schedule': 60.0,  # Run every 1 minute
+        'schedule': 60.0,  # Run every 10 minutes
     },
     'scrapy-test-every-10-seconds': {
         'task': 'main.tasks.health_check',
-        'schedule': 10.0,  # Run every 10 seconds
+        'schedule': 60.0,  # Run every 1 minutes
     },
 }
 
